@@ -17,3 +17,7 @@ I continued my experiments with VQ-VAE on MNIST data to see the efficacy of Prio
 ![alt text](https://github.com/lb-97/dipy/blob/blog_branch/doc/posts/2023/assets/vq-vae-results.png)
 
 Based on qualitatively analysis, PixelCNN outputs may require some extra work. This leads me to the next step in my research - to explore Diffusion models. 
+
+References-
+https://keras.io/examples/generative/vq_vae/
+https://keras.io/examples/generative/pixelcnn/
