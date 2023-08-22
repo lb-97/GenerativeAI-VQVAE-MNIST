@@ -1,3 +1,9 @@
+# Table of Contents
+1. [VQVAE-MNIST](#VQVAE-MNIST)
+2. [Efficacy of pretrained autoregressive prior in VQAVE](#Efficacy-of-pretrained-autoregressive-prior-in-VQAVE)
+3. [Results](#Results)
+4. [References](#References)
+
 # VQVAE - MNIST
 
 I took a deep dive into VQ-VAE code. Here's a little bit about VQ-VAE -
@@ -12,12 +18,14 @@ In the original paper, PixelCNN has shown to capture the distribution of data wh
 
 A point to be noted here is that the prior of VQ-VAE is trained in latent space rather than image space through PixelCNN. So, it doesn't replace decoder as discussed in the original paper, rather trained independently to reconstruct the latent space. So, the first question that comes to my mind - How does latent reconstruction help in image generation? Is prior training required at all? What happens if not done?
 
+# Efficacy of pretrained autoregressive prior in VQAVE
 I continued my experiments with VQ-VAE on MNIST data to see the efficacy of Prior training in the generated outputs. The output of encoder for every input image delivers a categorical index of a latent vector for every pixel in the output. As discussed previously, prior has been trained separately using PixelCNN (without any conditioning) in the latent space. If PixelCNN is a bunch of convolutions, then what makes it a generative model? This is an important question to ask and the answer to it is the sampling layer used on pixelCNN outputs during inference. The official code in Keras uses a tfp.layers.DistributionLambda(tfp.distributions.Categorical) layer as its sampling layer. Without this sampling layer PixelCNN outputs are deterministic and collapse to single output. Also similarly, sampling layer alone, i.e., without any PixelCNN trained prior, on the pre-determined outputs of encoder is deterministic. This is due to the fact that latent distances are correctly estimated by the pre-trained encoder and during inference categorical sampling layer would always sample the least distance latent, i.e., the one closest to the input. Therefore, the autoregressive nature of PixelCNN combined with a sampling layer for every pixel delivers an effective generative model. The outputs for all my experiments are shown in the image below -
 
+# Results
 ![alt text](https://github.com/lb-97/dipy/blob/blog_branch/doc/_static/vq-vae-results.png)
 
 Based on qualitatively analysis, PixelCNN outputs may require some extra work. This leads me to the next step in my research - to explore Diffusion models. 
 
-References-
+# References
 https://keras.io/examples/generative/vq_vae/
 https://keras.io/examples/generative/pixelcnn/
